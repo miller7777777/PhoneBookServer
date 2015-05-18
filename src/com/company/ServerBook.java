@@ -36,19 +36,18 @@ public class ServerBook {
                     String[] data = query.split(":");
                     if (data[0].equals("add")) {
                         message = addContact(data[1], data[2], data[3]);
-                        writer.println(message);
-                        writer.flush();
-                    } else if (data[0].equals("showall")){
+
+                        sendMessage(message);
+                    } else if (data[0].equals("showall")) {
                         showall();
-                        writer.println(allContacts);
-                        writer.flush();
+
+                        sendMessage(allContacts);
                         allContacts = "";
-                    } else if (data[0].equals("removecontact")){
-                        String message = removeContact(data[1]);
-                        writer.println(message);
-                        writer.flush();
-                    }
-                    else if (data[0].equals("stop")) {
+                    } else if (data[0].equals("removecontact")) {
+                        message = removeContact(data[1]);
+
+                        sendMessage(message);
+                    } else if (data[0].equals("stop")) {
                         break;
                     }
                 }
@@ -66,16 +65,23 @@ public class ServerBook {
     private String removeContact(String s) {
 
 
-
         for (int i = 0; i < book.size(); i++) {
 
-            if (book.get(i).getName().equals(s)){
-                book.remove(i);
-                message = "OK";
+            if (book.get(i).getName().equals(s)) {
 
-            } else {message = "Не найдено!";}
+
+                book.remove(i);
+
+                message = "OK. Контакт удален. Contact removed.";
+
+            } else {
+                message = "Не найдено! Not Found!";
+            }
+
 
         }
+
+
         return message;
     }
 
@@ -88,13 +94,10 @@ public class ServerBook {
 
         }
 
+
         System.out.println(allContacts);
 
         return allContacts;
-
-
-
-
 
 
     }
@@ -104,6 +107,12 @@ public class ServerBook {
         contact.print();
         book.add(contact);
 
-        return "OK";
+        return "OK. Контакт добавлен. Contact added!";
+    }
+
+    private void sendMessage(String message) {
+
+        writer.println(message);
+        writer.flush();
     }
 }
