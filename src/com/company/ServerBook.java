@@ -17,6 +17,7 @@ public class ServerBook {
     private ServerSocket serverSocket;
     private ArrayList<Contact> book;
     private String allContacts = "";
+    private String message = "";
     private PrintWriter writer;
 
     public void start() {
@@ -34,7 +35,9 @@ public class ServerBook {
                 if (query != null) {
                     String[] data = query.split(":");
                     if (data[0].equals("add")) {
-                        addContact(data[1], data[2], data[3]);
+                        message = addContact(data[1], data[2], data[3]);
+                        writer.println(message);
+                        writer.flush();
                     } else if (data[0].equals("showall")){
                         showall();
                         writer.println(allContacts);
@@ -62,7 +65,7 @@ public class ServerBook {
 
     private String removeContact(String s) {
 
-        String message = null;
+
 
         for (int i = 0; i < book.size(); i++) {
 
@@ -96,9 +99,11 @@ public class ServerBook {
 
     }
 
-    private void addContact(String name, String phone, String email) {
+    private String addContact(String name, String phone, String email) {
         Contact contact = new Contact(name, phone, email);
         contact.print();
         book.add(contact);
+
+        return "OK";
     }
 }
