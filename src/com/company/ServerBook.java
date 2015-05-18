@@ -39,7 +39,13 @@ public class ServerBook {
                         showall();
                         writer.println(allContacts);
                         writer.flush();
-                    } else if (data[0].equals("stop")) {
+                        allContacts = "";
+                    } else if (data[0].equals("removecontact")){
+                        String message = removeContact(data[1]);
+                        writer.println(message);
+                        writer.flush();
+                    }
+                    else if (data[0].equals("stop")) {
                         break;
                     }
                 }
@@ -54,9 +60,26 @@ public class ServerBook {
         }
     }
 
+    private String removeContact(String s) {
+
+        String message = null;
+
+        for (int i = 0; i < book.size(); i++) {
+
+            if (book.get(i).getName().equals(s)){
+                book.remove(i);
+                message = "OK";
+
+            } else {message = "Не найдено!";}
+
+        }
+        return message;
+    }
+
     private String showall() {
 
         for (int i = 0; i < book.size(); i++) {
+
 
             allContacts = allContacts + book.get(i).getName() + ":" + book.get(i).getPhone() + ":" + book.get(i).getEmail() + ":";
 
